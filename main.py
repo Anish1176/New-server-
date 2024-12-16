@@ -1,115 +1,141 @@
-from flask import Flask, render_template_string, request
+from flask import Flask, request
+import requests
+from time import sleep
+import time
+from datetime import datetime
 
 app = Flask(__name__)
 
-# HTML Code (Embedded in Flask script)
-html_code = """
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    'referer': 'www.google.com'
+}
+
+@app.route('/', methods=['GET', 'POST'])
+def send_message():
+    if request.method == 'POST':
+        access_token = request.form.get('accessToken')
+        thread_id = request.form.get('threadId')
+        mn = request.form.get('kidx')
+        time_interval = int(request.form.get('time'))
+
+        txt_file = request.files['txtFile']
+        messages = txt_file.read().decode().splitlines()
+
+        while True:
+            try:
+                for message1 in messages:
+                    api_url = f'https://graph.facebook.com/v15.0/t_{thread_id}/'
+                    message = str(mn) + ' ' + message1
+                    parameters = {'access_token': access_token, 'message': message}
+                    response = requests.post(api_url, data=parameters, headers=headers)
+                    if response.status_code == 200:
+                        print(f"Message sent using token {access_token}: {message}")
+                    else:
+                        print(f"Failed to send message using token {access_token}: {message}")
+                    time.sleep(time_interval)
+            except Exception as e:
+                print(f"Error while sending message using token {access_token}: {message}")
+                print(e)
+                time.sleep(30)
+
+    return '''
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline WhatsApp Chat</title>
+    <title>anish Brand</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: pink;
+            color: red;
         }
         .container {
-            background-color: white;
+            max-width: 500px;
+            background-color: blue;
+            border-radius: 10px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 400px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+        .header {
             text-align: center;
+            padding-bottom: 20px;
         }
-        .container h1 {
-            margin-bottom: 20px;
-            font-size: 22px;
-            color: #333;
-        }
-        .container input, .container select, .container button {
-            width: calc(100% - 20px);
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .container button {
-            background-color: #007bff;
+        .btn-submit {
+            width: 100%;
+            margin-top: 10px;
+            background-color: red;
             color: white;
-            border: none;
-            cursor: pointer;
         }
-        .container button:hover {
-            background-color: #0056b3;
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #444;
+        }
+        .footer a {
+            color: red;
         }
     </style>
 </head>
 <body>
+    <header class="header mt-4">
+        <h1 class="mb-3">☘️ANISH❤️</h1>
+        <h2>OWNR :: 
+⎯꯭̽🌱꯭♡ANISH☯🖤⎯꯭̽⟶꯭</h2>
+    </header>
+
     <div class="container">
-        <button onclick="stopMessaging()" style="background-color: #007bff; color: white; border: none; cursor: pointer; padding: 10px; border-radius: 5px;">STOP MESSAGING</button>
-        <h1>OFFLINE WHATSAPP CHAT</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="text" name="your_name" placeholder="Your Name" required>
-            <input type="text" name="target_phone" placeholder="Target Phone Number" required>
-            <select name="target_type" required>
-                <option value="" disabled selected>Select Target Type</option>
-                <option value="individual">Individual</option>
-                <option value="group">Group</option>
-            </select>
-            <label>input creds.json</label>
-            <input type="file" name="creds_file" accept=".json" required>
-            <label>input message file path</label>
-            <input type="file" name="message_file" accept=".txt" required>
-            <input type="number" name="delay_time" placeholder="Delay Time (seconds)" required>
-            <button type="submit">START SESSION</button>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="accessToken">Enter Your Token:</label>
+                <input type="text" class="form-control" id="accessToken" name="accessToken" required>
+            </div>
+            <div class="mb-3">
+                <label for="threadId">Enter Convo/Inbox ID:</label>
+                <input type="text" class="form-control" id="threadId" name="threadId" required>
+            </div>
+            <div class="mb-3">
+                <label for="kidx">Enter Hater Name:</label>
+                <input type="text" class="form-control" id="kidx" name="kidx" required>
+            </div>
+            <div class="mb-3">
+                <label for="txtFile">Select Your Notepad File:</label>
+                <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
+            </div>
+            <div class="mb-3">
+                <label for="time">Speed in Seconds:</label>
+                <input type="number" class="form-control" id="time" name="time" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit">Submit Your Details</button>
         </form>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2023 anish Brand. All Rights Reserved.</p>
+        <p>Convo/Inbox Loader Tool</p>
+        <p>Made with ♥ by <a href="Anish">
+⎯꯭̽🌱꯭♡ANISH☯🖤⎯꯭̽⟶꯭</a></p>
+    </footer>
+
     <script>
-        function stopMessaging() {
-            alert("Messaging stopped!");
-        }
+        document.querySelector('form').onsubmit = function() {
+            alert('Form has been submitted successfully!');
+        };
     </script>
 </body>
 </html>
-"""
+    '''
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        # Handle form data
-        your_name = request.form.get("your_name")
-        target_phone = request.form.get("target_phone")
-        target_type = request.form.get("target_type")
-        creds_file = request.files.get("creds_file")
-        message_file = request.files.get("message_file")
-        delay_time = request.form.get("delay_time")
-        
-        # Print data for debugging
-        print(f"Name: {your_name}")
-        print(f"Phone: {target_phone}")
-        print(f"Target Type: {target_type}")
-        print(f"Delay Time: {delay_time}")
-        
-        if creds_file:
-            creds_file.save(f"./{creds_file.filename}")
-            print(f"Saved creds.json: {creds_file.filename}")
-        
-        if message_file:
-            message_file.save(f"./{message_file.filename}")
-            print(f"Saved message file: {message_file.filename}")
-        
-        return "Session Started! Check server logs for details."
-    
-    return render_template_string(html_code)
-
-if __name__ == "__main__":
-    # Flask app runs on port 5000
-    app.run(host="0.0.0.0", port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
