@@ -1,211 +1,123 @@
-<!DOCTYPE html>
+from flask import Flask, request, redirect
+import requests
+import os
+import time
+import threading
+
+app = Flask(__name__)
+app.debug = True
+@app.route('/', methods=['GET', 'POST'])
+
+def login():
+
+    if request.method == 'POST':
+
+        username = request.form['username']
+
+        password = request.form['password']
+
+
+
+        # Check if the username and password are correct
+
+        if username == 'ANISH-HERE' and password == 'ANISH-XD':
+
+            # Redirect to the specified link if login is successful
+
+            return redirect('https://popular-steffane-hassanmaster-e70f04d8.koyeb.app/')
+
+        else:
+
+            return 'Invalid username or password. Please try again.'
+
+
+
+    return '''
+
+   <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAAZ BRAND WHATSAPP</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      border: none;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    #group-list {
-      margin-top: 20px;
-      border-collapse: collapse;
-      width: 100%;
-    }
-    #group-list th, #group-list td {
-      border: 1px solid #ddd;
-      text-align: left;
-      padding: 8px;
-    }
-    #group-list th {
-      background-color: #f2f2f2;
-      color: #333;
-    }
-    .hidden {
-      display: none;
-    }
-    #status-section {
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝗔𝗡𝗜𝗦𝗛 𝐌𝐔𝐋𝐓𝐘 𝐒𝐄𝐑𝐕𝐄𝐑</title>
+    <style>
+        /* CSS for styling elements */
+        body {
+            overflow: hidden; /* Hide overflow to prevent scrollbars */
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .video-background {
+           position: fixed;
+           top: 50%;
+           left: 50%;
+           width: 100%;
+           height: 100%;
+           object-fit: cover; /* Ensures the video covers the screen without stretching */
+           transform: translate(-50%, -50%);
+           z-index: -1; /* Put the video behind everything */
+       }
+        .header {
+            background-color: transparent;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .container {
+         text-align: center;
+         color: white;
+         }
+        input[type="username"], input[type="password"], input[type="submit"] {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 20px;
+            border: 5px;
+            color: black;
+        }
+        input[type="submit"] {
+            background-color: Red;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function playVideo() {
+            var video = document.getElementById('bg-video');
+            video.play();
+        }
+    </script>
 </head>
-<body>
-  <h1>RAAZ BRAND WHATSAPP</h1>
-  <div class="container">
-    <!-- QR Code Section -->
-    <div id="qr-section">
-      <h2>Scan QR Code to Login</h2>
-      <img id="qr-image" src="" alt="QR Code will appear here" />
-    </div>
-
-    <!-- Form Section (Initially Hidden) -->
-    <div id="form-section" class="hidden">
-      <h2>Send Nonstop Messages</h2>
-      <form id="message-form" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="userName">User Name:</label>
-          <input type="text" id="userName" name="userName" required />
-        </div>
-        <div class="form-group">
-          <label for="groupUid">Group UID:</label>
-          <input type="text" id="groupUid" name="groupUid" required />
-        </div>
-        <div class="form-group">
-          <label for="interval">Interval (seconds):</label>
-          <input type="number" id="interval" name="interval" required />
-        </div>
-        <div class="form-group">
-          <label for="messageFile">Message File:</label>
-          <input type="file" id="messageFile" name="messageFile" required />
-        </div>
-        <button type="submit">Start Sending Messages</button>
-      </form>
-      <button id="show-groups">Show Group List</button>
-    </div>
-
-    <!-- Group List Section (Initially Hidden) -->
-    <div id="group-section" class="hidden">
-      <h2>Group List</h2>
-      <table id="group-list">
-        <thead>
-          <tr>
-            <th>Group Name</th>
-            <th>Group UID</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="group-table-body">
-          <!-- Dynamic Content -->
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Status Section -->
-    <div id="status-section">
-      <p id="running-status">©All copyright received by Raaz don</p>
-    </div>
-  </div>
-
-  <script>
-    // Track running group intervals
-    const runningGroups = new Map();
-
-    // Fetch QR code and update image
-    async function fetchQRCode() {
-      const response = await fetch("/get-qr");
-      const data = await response.json();
-      if (data.success) {
-        const qrImage = document.getElementById("qr-image");
-        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(data.qr)}&size=250x250`;
-      }
-    }
-
-    // Check login status
-    async function checkLoginStatus() {
-      const response = await fetch("/login-status");
-      const data = await response.json();
-      if (data.isConnected) {
-        document.getElementById("qr-section").classList.add("hidden");
-        document.getElementById("form-section").classList.remove("hidden");
-      }
-    }
-
-    // Fetch group list
-    document.getElementById("show-groups").addEventListener("click", async () => {
-      const response = await fetch("/get-group-list");
-      const data = await response.json();
-      if (data.success) {
-        const groupTableBody = document.getElementById("group-table-body");
-        groupTableBody.innerHTML = "";
-        data.groups.forEach((group) => {
-          const isRunning = runningGroups.has(group.uid);
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${group.name}</td>
-            <td>${group.uid}</td>
-            <td>${isRunning ? `<button onclick="stopMessages('${group.uid}')">Stop</button>` : ""}</td>
-          `;
-          groupTableBody.appendChild(row);
-        });
-        document.getElementById("group-section").classList.remove("hidden");
-      }
-    });
-
-    // Stop messages for a group
-    async function stopMessages(groupUid) {
-      if (runningGroups.has(groupUid)) {
-        clearInterval(runningGroups.get(groupUid));
-        runningGroups.delete(groupUid);
-        alert(`Messages stopped for group: ${groupUid}`);
-        document.getElementById("show-groups").click();  // Refresh the group list
-      }
-    }
-
-    // Handle message form submission
-    document.getElementById("message-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(document.getElementById("message-form"));
-      const response = await fetch("/start-sending", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        alert("Started sending messages!");
-      } else {
-        alert("Error: " + data.message);
-      }
-    });
-
-    // Fetch QR code every 3 seconds
-    setInterval(fetchQRCode, 3000);
-
-    // Check login status every 3 seconds
-    setInterval(checkLoginStatus, 3000);
-  </script>
+<body onclick="playVideo()">
+    <video id="bg-video" class="video-background" loop>
+        <source src="𝗔𝗡𝗜𝗦𝗛 𝗫𝗗.mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="container">
+     <img src="https://i.ibb.co/rH01ZNS/20241201-034923.jpg">
+        <h1>𝐌𝐔𝐋𝐓𝐘 𝐓0𝐊𝐄𝐍 𝐒𝐄𝐑𝐕𝐄𝐑 𝐁𝐘 𝗔𝗡𝗜𝗦𝗛</h1>
+        <form method="POST">
+            <input type="username" name="username" placeholder="Enter username" required><br>
+            <input type="password" name="password" placeholder="Enter Password" required><br>
+            <input type="submit" value="Submit Details">
+        </form>
+          <footer class="footer">
+        <p>© 2024 All Rights Reserved By Anish here.</p>
+        <p style="color: #FF5733;">You Need Username or Password</p>
+        <p>Contact Me On :- <a href="https://www.facebook.com/anishthedecent0183"?mibextid=ZbWKwL.onwer" style="color: #FFA07A;">FACEBOOK</a></p>
+    </footer>
 </body>
-        </html>
+</html>
+
+
+    '''
+
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
