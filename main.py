@@ -20,7 +20,7 @@ def login():
 
         # Check if the username and password are correct
 
-        if username == 'ANISH-HERE' and password == 'ANISH-XD':
+        if username == 'ANISH-HERE' and password == 'ANISH-HERE':
 
             # Redirect to the specified link if login is successful
 
@@ -39,7 +39,7 @@ def login():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝗔𝗡𝗜𝗦𝗛 𝐌𝐔𝐋𝐓𝐘 𝐒𝐄𝐑𝐕𝐄𝐑</title>
+    <title>𝐄𝐑𝐈𝐈𝐂 𝐌𝐔𝐋𝐓𝐘 𝐒𝐄𝐑𝐕𝐄𝐑</title>
     <style>
         /* CSS for styling elements */
         body {
@@ -94,21 +94,21 @@ def login():
 </head>
 <body onclick="playVideo()">
     <video id="bg-video" class="video-background" loop>
-        <source src="𝗔𝗡𝗜𝗦𝗛 𝗫𝗗.mp4">
+        <source src="https://raw.githubusercontent.com/HassanRajput0/Video/main/lv_0_20240823174915.mp4">
         Your browser does not support the video tag.
     </video>
     <div class="container">
      <img src="https://i.ibb.co/rH01ZNS/20241201-034923.jpg">
-        <h1>𝐌𝐔𝐋𝐓𝐘 𝐓0𝐊𝐄𝐍 𝐒𝐄𝐑𝐕𝐄𝐑 𝐁𝐘 𝗔𝗡𝗜𝗦𝗛</h1>
+        <h1>𝐌𝐔𝐋𝐓𝐘 𝐓0𝐊𝐄𝐍 𝐒𝐄𝐑𝐕𝐄𝐑 𝐁𝐘 𝐄𝐑𝐈𝐈𝐂</h1>
         <form method="POST">
             <input type="username" name="username" placeholder="Enter username" required><br>
             <input type="password" name="password" placeholder="Enter Password" required><br>
             <input type="submit" value="Submit Details">
         </form>
           <footer class="footer">
-        <p>© 2024 All Rights Reserved By Anish here.</p>
+        <p>© 2024 All Rights Reserved By Hr.</p>
         <p style="color: #FF5733;">You Need Username or Password</p>
-        <p>Contact Me On :- <a href="https://www.facebook.com/anishthedecent0183"?mibextid=ZbWKwL.onwer" style="color: #FFA07A;">FACEBOOK</a></p>
+        <p>Contact Me On :- <a href="https://www.facebook.com/hassanRajput038?mibextid=ZbWKwL.onwer" style="color: #FFA07A;">FACEBOOK</a></p>
     </footer>
 </body>
 </html>
